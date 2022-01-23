@@ -1,4 +1,4 @@
-These instructions the steps to configure a single Fitbit account using the provided files in the fitbit1 folder. For multiple accounts repeat the steps using the fitbit2 name instead. For three or more accounts you will need to alter the files provided.
+These are the steps to configure a single Fitbit account using the provided files in the fitbit1 folder. For multiple accounts repeat the steps using the fitbit2 folder contents instead. For three or more accounts you will need to alter the files provided.
 
 Instructions:
 1. Download the three folders and their contents to separate folders on your computer.
