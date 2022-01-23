@@ -36,7 +36,7 @@ ATTRIBUTION: Final = "Data provided by Fitbit.com"
 
 FITBIT_AUTH_CALLBACK_PATH: Final = "/api/fitbit1/callback"
 FITBIT_AUTH_START: Final = "/api/fitbit1"
-FITBIT_CONFIG_FILE: Final = "fitbit_fitbit1.conf"
+FITBIT_CONFIG_FILE: Final = "fitbit1.conf"
 FITBIT_DEFAULT_RESOURCES: Final[list[str]] = ["activities/steps"]
 
 DEFAULT_CONFIG: Final[dict[str, str]] = {
