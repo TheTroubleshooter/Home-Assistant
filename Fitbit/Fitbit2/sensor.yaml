@@ -1,4 +1,4 @@
-# Fitbit device 2
+# Fitbit account 2
   - platform: fitbit2
     clock_format: 12H
     unit_system: en_US
