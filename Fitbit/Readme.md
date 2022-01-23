@@ -7,7 +7,7 @@ Instructions:
 4. Restart Home Assistant
 5. Depending on how you are applying your sensors (configuration.yaml or sensor.yaml) add the sensor information provided in the sensor.yaml from the fitbit1 folder.
 6. Restart Home Assistant
-7. You should now see a new Notification to setup the fitbit1 sensor. Click Configure and follow the steps to create app on dev.fitbit.com. Make sure that the callback address looks like this "https://YOURDOMAIN:8123/api/fitbit1/callback"
+7. You should now see a new Notification to setup the fitbit1 sensor. Click Configure and follow the steps to create app on dev.fitbit.com. Make sure that the callback address looks like this "https://YOURDOMAIN:8123/api/fitbit1/callback". <--this will change depending on the folder you are using fitbit1 vs fitbit2.
 8. After you have completed the first configuration step you should see a second notification. Click configure and follow steps to authorize HA to access fitbit information.
 9. You should now see sensors names with "sensor.fitbit1.xxxxx"
 10. For second account repeat steps using the contents of fitbit2 folder.
