@@ -7,8 +7,8 @@ Instructions:
 4. Depending on how you are adding sensors you will need to update your configuration.yaml or sensor.yaml file with the new sensor information. From the sensor.yaml that you downloaded in step 1 copy the contents of that file and add it to configuration.yaml or sensor.yaml. 
 5. Restart Home Assistant
 6. You should now see a Notification to setup the Fitbit sensor in the Notifications section of the menu. Click Notification then click Configure and follow the steps to create app on dev.fitbit.com. Make sure that the callback address looks like this "https://YOURDOMAIN:8123/api/fitbit1/callback". <--This will change depending on the provided folder you are using fitbit1, fitbit2, fitbit3, fitbit4, fitbit5.
-7. You should now see a second Notification to setup the Fitbit sensor in the Notifications section of the menu. Click Notification then click Configure and follow steps to authorize Home Assistant to access yor fitbit information.
-8. Goto your Entiies and check to see if you see the new sensors. Do a search in Entities for "sensor.fitbit1" to see the sensors populated. 
+7. You should now see a second Notification to setup the Fitbit sensor in the Notifications section of the menu. Click Notification then click Configure and follow steps to authorize Home Assistant to access your fitbit information.
+8. Open Entities and check to see if you see the new sensors. Do a search in Entities for "sensor.fitbit1" to see the sensors populated. 
 9. For multiple Fitbit accounts repeat the process using the provided Fitbit2, Fitbit3, Fitbit4, Fitbit5 folders.
 
 Other: 
