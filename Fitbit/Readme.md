@@ -1,4 +1,4 @@
-These are the steps to configure a single Fitbit account using the provided files in the fitbit1 folder. For multiple accounts repeat the steps using the fitbit2 folder contents instead. For three or more accounts you will need to alter the files provided.
+These steps will help you configure a single Fitbit account using the provided files in the fitbit1 folder. For multiple accounts repeat the steps using the fitbit2 folder contents instead. For three or more accounts you will need to alter the files provided.
 
 Instructions:
 1. Download the three folders and their contents to separate folders on your computer.
@@ -13,4 +13,4 @@ Instructions:
 10. For second account repeat steps using the contents of fitbit2 folder.
 
 Suggestions:
-1. For the dev.fitbit.com part of the setup use a browser that you are ok with clearing the browser data. The reason why is that you should clear the browser between adding additional accounts. I found that doing this stopped the 404 errors I would get when adding the second account.
+1. For the dev.fitbit.com part of the setup use a browser that you are ok with clearing the browser data. The reason why is that you should clear the browser between adding additional accounts. I found that doing this prevented any errors I would get when adding the second account.
