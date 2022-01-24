@@ -18,10 +18,11 @@ Instructions:
 8. Open Entities and check to see if you see the new sensors. Do a search in Entities for "sensor.fitbit1" to see the sensors populated. 
 9. For multiple Fitbit accounts repeat the process using the provided Fitbit2, Fitbit3, Fitbit4, Fitbit5 folders.
 
-Other: 
+Notes: 
 1. For the dev.fitbit.com part of the setup use a browser that you are ok with clearing the browser data. The reason why is that you should clear the browser between adding additional accounts. I found that doing this prevented any errors I would get when adding the second account.
 2. To customize the sensor names from the set names of fitbit1, fitbit2, fitbit3, fitbit4, fitbit5 use the following steps. It is best to use Notepad++ for this. In the "fitbit1" folder open the const.py file and do a find/replace for this name="Fitbit1 and replace it with the name you want the sensor to be. For example if you want the name to be john replace the name to be name="john and the sensors names will be sensor.john_weight for the weight sensor.
 3. To customize the config file name saved in the /config folder from the set name of fitbit1.conf open the const.py file and find the section "FITBIT_CONFIG_FILE: Final = "fitbit1.conf" and change it to your preferd name. For example if you want john as the config file name change it to "fitbit_john.conf"
 4. Customizations should be done prior to placing the files into your Home Assistant installation.
 5. Notepad++ with the compare plug-in is recommended for file edits.
 6. Cloud Polling issues. I have not confirmed this is a real issue but if you experiance cloud polling issues with multiple accounts where entities do not get updated info try offsetting the cloud polling time by one minute for each account added. For example the default cloud polling time is 30 minutes so for fitbit1 leave it at 30 minutes but set fitbit2 to 31 minutes. The cloud polling time can be found sensor.py file in each fitbit folder. This is the section you need to update: "SCAN_INTERVAL: Final = datetime.timedelta(minutes=31)"
+7. It has been reported that it may be necessary to have the Internal and External URL's setup for the Fitbit configure Notifications to come through. Thank you (MidnightRacer) for the input! 
