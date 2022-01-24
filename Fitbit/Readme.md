@@ -1,9 +1,9 @@
--------------------------------------------------------
+------------------------------------------
 My system:
-Home Assistant Version: 2021.12.10
-Account1: Charge 2 & Arai scale user
-Account2: Arai scale user
--------------------------------------------------------
+- Home Assistant Version: 2021.12.10
+- Account1: Arai scale user & Charge 2
+- Account2: Arai scale user
+------------------------------------------
 
 The following instructions will walk you through configuring a single Fitbit account on Home Assistant using the contents of the "Fitbit1" folder. For multiple Fitbit accounts just repeat the process using the contents of the Fitbit2, Fitbit3, Fitbit4, Fitbit5 folders. I have tested this with two Fitbit accounts and it works flawlessly.
 
