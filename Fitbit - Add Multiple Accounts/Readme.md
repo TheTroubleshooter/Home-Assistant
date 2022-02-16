@@ -1,6 +1,6 @@
 ------------------------------------------
 My system:
-- Home Assistant Version: 2021.12.10
+- Home Assistant Version: 2022.2.6
 - Account1: Arai scale user & Charge 2
 - Account2: Arai scale user
 ------------------------------------------
