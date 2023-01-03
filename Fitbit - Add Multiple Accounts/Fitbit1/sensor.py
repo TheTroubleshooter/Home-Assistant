@@ -32,6 +32,7 @@ from homeassistant.helpers.icon import icon_for_battery_level
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util.json import load_json, save_json
+from homeassistant.util.unit_system import METRIC_SYSTEM
 
 from .const import (
     ATTR_ACCESS_TOKEN,
@@ -198,7 +199,7 @@ def setup_platform(
         if (unit_system := config[CONF_UNIT_SYSTEM]) == "default":
             authd_client.system = authd_client.user_profile_get()["user"]["locale"]
             if authd_client.system != "en_GB":
-                if hass.config.units.is_metric:
+                if hass.config.units is METRIC_SYSTEM:
                     authd_client.system = "metric"
                 else:
                     authd_client.system = "en_US"
@@ -213,7 +214,7 @@ def setup_platform(
                 authd_client,
                 config_path,
                 description,
-                hass.config.units.is_metric,
+                hass.config.units is METRIC_SYSTEM,
                 clock_format,
             )
             for description in FITBIT_RESOURCES_LIST
@@ -226,7 +227,7 @@ def setup_platform(
                         authd_client,
                         config_path,
                         FITBIT_RESOURCE_BATTERY,
-                        hass.config.units.is_metric,
+                        hass.config.units is METRIC_SYSTEM,
                         clock_format,
                         dev_extra,
                     )
