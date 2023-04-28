@@ -31,7 +31,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.icon import icon_for_battery_level
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.util.json import load_json, save_json
+from homeassistant.helpers.json import save_json
+from homeassistant.util.json import load_json
 from homeassistant.util.unit_system import METRIC_SYSTEM
 
 from .const import (
@@ -408,20 +409,17 @@ class FitbitSensor(SensorEntity):
                 filter(lambda device: device.get("id") == device_id, registered_devs)
             )[0]
             self._attr_native_value = self.extra.get("battery")
-
         else:
             container = resource_type.replace("/", "-")
             response = self.client.time_series(resource_type, period="7d")
             raw_state = response[container][-1].get("value")
-            if resource_type == "activities/distance":
+            if resource_type == "activities/heart":
+                self._attr_native_value = (
+                    response[container][-1].get("value").get("restingHeartRate")
+                )
+            elif resource_type in ["activities/distance", "activities/tracker/distance"]:
                 self._attr_native_value = format(float(raw_state), ".2f")
-            elif resource_type == "activities/tracker/distance":
-                self._attr_native_value = format(float(raw_state), ".2f")
-            elif resource_type == "body/bmi":
-                self._attr_native_value = format(float(raw_state), ".1f")
-            elif resource_type == "body/fat":
-                self._attr_native_value = format(float(raw_state), ".1f")
-            elif resource_type == "body/weight":
+            elif resource_type in ["body/bmi", "body/fat"]:
                 self._attr_native_value = format(float(raw_state), ".1f")
             elif resource_type == "sleep/startTime":
                 if raw_state == "":
@@ -443,14 +441,11 @@ class FitbitSensor(SensorEntity):
                     self._attr_native_value = raw_state
                 else:
                     try:
-                        self._attr_native_value = f"{int(raw_state):,}"
+                        self._attr_native_value = int(raw_state)
+                    except ValueError:
+                        self._attr_native_value = float(raw_state)
                     except TypeError:
                         self._attr_native_value = raw_state
-
-        if resource_type == "activities/heart":
-            self._attr_native_value = (
-                response[container][-1].get("value").get("restingHeartRate")
-            )
 
         token = self.client.client.session.token
         config_contents = {
