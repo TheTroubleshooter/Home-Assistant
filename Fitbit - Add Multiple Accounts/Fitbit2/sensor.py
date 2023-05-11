@@ -210,6 +210,10 @@ def setup_platform(
         registered_devs = authd_client.get_devices()
         clock_format = config[CONF_CLOCK_FORMAT]
         monitored_resources = config[CONF_MONITORED_RESOURCES]
+
+        adapter = HTTPAdapter(pool_connections=len(monitored_resources), pool_maxsize=len(monitored_resources))
+        authd_client.client.session.mount("https://", adapter)
+
         entities = [
             FitbitSensor(
                 authd_client,
