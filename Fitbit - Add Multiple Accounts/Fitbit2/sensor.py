@@ -5,6 +5,7 @@ import datetime
 import logging
 import os
 import time
+from requests.adapters import HTTPAdapter
 from typing import Any, Final, cast
 
 from aiohttp.web import Request
