@@ -5,6 +5,7 @@ import datetime
 import logging
 import os
 import time
+from requests.adapters import HTTPAdapter
 from typing import Any, Final, cast
 
 from aiohttp.web import Request
@@ -31,7 +32,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.icon import icon_for_battery_level
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from homeassistant.util.json import load_json, save_json
+from homeassistant.helpers.json import save_json
+from homeassistant.util.json import load_json
 from homeassistant.util.unit_system import METRIC_SYSTEM
 
 from .const import (
@@ -52,6 +54,7 @@ from .const import (
     FITBIT_RESOURCE_BATTERY,
     FITBIT_RESOURCES_KEYS,
     FITBIT_RESOURCES_LIST,
+    FITBIT_USER,
     FitbitSensorEntityDescription,
 )
 
@@ -91,7 +94,7 @@ def request_app_setup(
         if os.path.isfile(config_path):
             config_file = load_json(config_path)
             if config_file == DEFAULT_CONFIG:
-                error_msg = "You didn't correctly modify fitbit2.conf, please try again."
+                error_msg = f"You didn't correctly modify {FITBIT_CONFIG_FILE}, please try again."
 
                 configurator.notify_errors(hass, _CONFIGURING["fitbit"], error_msg)
             else:
@@ -116,7 +119,7 @@ def request_app_setup(
         )
         return
 
-    submit = "I have saved my Client ID and Client Secret into fitbit2.conf."
+    submit = f"I have saved my Client ID and Client Secret into {FITBIT_CONFIG_FILE}."
 
     _CONFIGURING["fitbit"] = configurator.request_config(
         hass,
@@ -209,6 +212,10 @@ def setup_platform(
         registered_devs = authd_client.get_devices()
         clock_format = config[CONF_CLOCK_FORMAT]
         monitored_resources = config[CONF_MONITORED_RESOURCES]
+
+        adapter = HTTPAdapter(pool_connections=len(monitored_resources), pool_maxsize=len(monitored_resources))
+        authd_client.client.session.mount("https://", adapter)
+
         entities = [
             FitbitSensor(
                 authd_client,
@@ -360,8 +367,9 @@ class FitbitSensor(SensorEntity):
         self.is_metric = is_metric
         self.clock_format = clock_format
         self.extra = extra
+
         if self.extra is not None:
-            self._attr_name = f"{self.extra.get('deviceVersion')} Battery"
+            self._attr_name = f"{FITBIT_USER}'s {self.extra.get('deviceVersion')} Battery"
         if (unit_type := description.unit_type) == "":
             split_resource = description.key.rsplit("/", maxsplit=1)[-1]
             try:
@@ -408,20 +416,17 @@ class FitbitSensor(SensorEntity):
                 filter(lambda device: device.get("id") == device_id, registered_devs)
             )[0]
             self._attr_native_value = self.extra.get("battery")
-
         else:
             container = resource_type.replace("/", "-")
             response = self.client.time_series(resource_type, period="7d")
             raw_state = response[container][-1].get("value")
-            if resource_type == "activities/distance":
+            if resource_type == "activities/heart":
+                self._attr_native_value = (
+                    response[container][-1].get("value").get("restingHeartRate")
+                )
+            elif resource_type in ["activities/distance", "activities/tracker/distance"]:
                 self._attr_native_value = format(float(raw_state), ".2f")
-            elif resource_type == "activities/tracker/distance":
-                self._attr_native_value = format(float(raw_state), ".2f")
-            elif resource_type == "body/bmi":
-                self._attr_native_value = format(float(raw_state), ".1f")
-            elif resource_type == "body/fat":
-                self._attr_native_value = format(float(raw_state), ".1f")
-            elif resource_type == "body/weight":
+            elif resource_type in ["body/bmi", "body/fat"]:
                 self._attr_native_value = format(float(raw_state), ".1f")
             elif resource_type == "sleep/startTime":
                 if raw_state == "":
@@ -443,14 +448,11 @@ class FitbitSensor(SensorEntity):
                     self._attr_native_value = raw_state
                 else:
                     try:
-                        self._attr_native_value = f"{int(raw_state):,}"
+                        self._attr_native_value = int(raw_state)
+                    except ValueError:
+                        self._attr_native_value = float(raw_state)
                     except TypeError:
                         self._attr_native_value = raw_state
-
-        if resource_type == "activities/heart":
-            self._attr_native_value = (
-                response[container][-1].get("value").get("restingHeartRate")
-            )
 
         token = self.client.client.session.token
         config_contents = {
