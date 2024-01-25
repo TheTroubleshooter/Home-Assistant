@@ -54,6 +54,7 @@ from .const import (
     FITBIT_RESOURCE_BATTERY,
     FITBIT_RESOURCES_KEYS,
     FITBIT_RESOURCES_LIST,
+    FITBIT_USER,
     FitbitSensorEntityDescription,
 )
 
@@ -93,7 +94,7 @@ def request_app_setup(
         if os.path.isfile(config_path):
             config_file = load_json(config_path)
             if config_file == DEFAULT_CONFIG:
-                error_msg = "You didn't correctly modify fitbit1.conf, please try again."
+                error_msg = f"You didn't correctly modify {FITBIT_CONFIG_FILE}, please try again."
 
                 configurator.notify_errors(hass, _CONFIGURING["fitbit"], error_msg)
             else:
@@ -118,7 +119,7 @@ def request_app_setup(
         )
         return
 
-    submit = "I have saved my Client ID and Client Secret into fitbit1.conf."
+    submit = f"I have saved my Client ID and Client Secret into {FITBIT_CONFIG_FILE}."
 
     _CONFIGURING["fitbit"] = configurator.request_config(
         hass,
@@ -366,8 +367,9 @@ class FitbitSensor(SensorEntity):
         self.is_metric = is_metric
         self.clock_format = clock_format
         self.extra = extra
+
         if self.extra is not None:
-            self._attr_name = f"{self.extra.get('deviceVersion')} Battery"
+            self._attr_name = f"{FITBIT_USER}'s {self.extra.get('deviceVersion')} Battery"
         if (unit_type := description.unit_type) == "":
             split_resource = description.key.rsplit("/", maxsplit=1)[-1]
             try:
